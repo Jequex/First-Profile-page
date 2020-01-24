@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Sign Up</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" charset="utf-8" />
+    <link href="./css/bootstrap.min.css" rel="stylesheet" />
+    <link href="./css/ej.web.all.min.css" rel="stylesheet" />
+    <link href="./css/default.css" rel="stylesheet" />
+    <link href="./css/default-responsive.css" rel="stylesheet" />
+    <!--[if lt IE 9]>
+	<script src="../scripts/jquery-1.11.3.min.js" type="text/javascript" ></script> 
+	<![endif]-->
+    <!--[if IE 9]><!-->
+    <script src="./js/jquery-3.4.1.min.js" type="text/javascript"> </script>
+    <!--<![endif]-->
+    <script src="./js/ej.web.all.min.js" type="text/javascript"></script>
+    <script src="./js/properties.js" type="text/javascript"></script>
+</head>
+<body>
+    <div class="content-container-fluid">
+        <div class="row">
+            <div class="cols-sample-area">
+                <div class="frame">
+                    <div class="control">
+                        <table class="editors">
+
+                            <tbody>
+                                <tr><td><span id="error"></span></td></tr>
+                                <tr>
+                                    <td>
+                                        <span>First Name</span>
+                                    </td></tr> <tr>
+                                    <td>
+                                        <input type="text" id="firstname" name="firstname" required="required"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <span>Last Name</span>
+                                    </td></tr> <tr>
+                                    <td>
+                                        <input type="text" id="lastname" name="lastname" required="required"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <span>Email Address</span>
+                                    </td></tr> <tr>
+                                    <td>
+                                        <input type="email" id="email" name="email" required="required"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <span>Confirm Email Address</span>
+                                    </td></tr> <tr>
+                                    <td>
+                                        <input type="email" id="email2" required="required"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <span>Username</span>
+                                    </td></tr> <tr>
+                                    <td>
+                                        <input type="text" id="username" name="username" required="required"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <span>Mobile No</span>
+                                    </td></tr> <tr>
+                                    <td>
+                                        <input id="mobile" type="text"  name="mobile" required="required"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <span>Age</span>
+                                    </td></tr> <tr>
+                                    <td>
+                                        <input id="age" class="numeric"type="text"  name="age" required="required"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="paybill">
+                                            <button class="btn btn-sm btn-danger" id="back">Back</button>
+                                            <button class="btn btn-sm btn-success" id="pbill">Submit</button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>                      
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="text/javascript">
+        $(function () {
+            $(".numeric").ejNumericTextbox(
+            {
+                name: "numeric",
+                value: 18,
+                minValue: 0,
+                width:"100%"
+            });
+
+            $('#pbill').click((e)=>{
+                e.preventDefault();
+
+                var firstname = $('#firstname').val();
+                var lastname = $('#lastname').val();
+                var username = $('#username').val();
+                var email = $('#email').val();
+                var email2 = $('#email2').val();
+                var mobile = $('#mobile').val();
+                var age = $('#age').val();
+                
+                if(username.length <= 4){
+                    $('#error').html("Username must be at least 5 letters long")
+                    return
+                }else if(firstname.length <= 1 || !firstname.match(/^[a-zA-Z]+$/)){
+                    $('#error').html("Firstname required")
+                    return
+                }else if(lastname.length <= 1 || !lastname.match(/^[a-zA-Z]+$/)){
+                    $('#error').html("Lastname required")
+                    return
+                }else if(!email.match(/\S+@\S+\.\S+/) ||email.length < 1 || email != email2){
+                    $('#error').html("emails incorrect or dont match")
+                    return
+                }else if(mobile.length <= 10 || !mobile.match(/^0[0-9]{10}/)){
+                    $('#error').html("Phone number incorrect")
+                    return
+                }
+                
+
+                $.ajax({
+                    url: 'http://www.jequex.com.ng/Students',
+                    method: 'GET',
+                }).done((e)=>{
+                    for(let q = 0; q < e.length; q++){
+                        if(e[q].mobile == mobile){
+                            document.getElementById("error").innerHTML = "Email/Phone already exists";
+                            return
+                        }else if(e[q].email == email){
+                            document.getElementById("error").innerHTML = "Email/Phone already exists";
+                            return
+                        }else if(e[q].username == username){
+                            document.getElementById("error").innerHTML = "Username already exists";
+                            return
+                        }
+                    }
+                    $.ajax({
+                    url: 'http://www.jequex.com.ng/Students',
+                    method: 'POST',
+                    data:{
+                        firstname, lastname, username, email, mobile, age
+                    }
+                }).done((e)=>{
+                    alert("successsful")
+                    window.location.replace('./index.html')
+                })
+                })
+            })
+
+            $('#back').click((e)=>{
+                e.preventDefault()
+                window.location.replace('./index.html')
+            })
+        });
+    </script>
+    <style type="text/css" class="cssStyles">
+        .control table{
+           width:100%;
+        }
+        .control td {
+           padding: 5px;
+        }
+        div.paybill{
+            position:relative;
+            float:right;
+        }
+        input{
+            width: 100%
+        }
+        #error{
+            color: red
+        }
+        
+    </style>
+</body>
+</html>

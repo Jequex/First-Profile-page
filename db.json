@@ -1,0 +1,23 @@
+{
+  "Students": [
+    {
+      "firstname": "Chukwunonso",
+      "lastname": "Onyejekwe",
+      "username": "Jequex",
+      "email": "onyejekwe.harddisk20@gmail.com",
+      "mobile": "08141676170",
+      "age": "18",
+      "id": 1
+    }
+  ],
+  "Contacts": [
+    {
+      "name": "Onyejekwe Chukwunonso John",
+      "email": "onyejekwe.harddisk20@gmail.com",
+      "organization": "Jequex inc.",
+      "phone": "08141676170",
+      "message": "I miss you, I love you, I want you, where are you, come and stay with me, come lets play our favorite games",
+      "id": 1
+    }
+  ]
+}
